@@ -16,6 +16,7 @@
             return wait;
         }
         
+        //Populates the list of users and adds an event listener to each
         getUsers()
         .then(res => res.json())
         .then(data=>{
@@ -31,6 +32,8 @@
             document.getElementById('users').innerHTML = users;
             let collection = document.getElementById('users').children;
 
+            //Event listener is called on 'click' and posts all title and bodies from JSON for the
+            //intended user.
             for(let i = 0; i < collection.length; i++)
             {
                 collection[i].addEventListener('click', ()=>{
@@ -55,7 +58,7 @@
             }
         });
     </script>
-
+    <!-- Using bulma.css for a little styling, but didn't get too carried away -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
