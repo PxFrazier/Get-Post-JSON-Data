@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script defer>
+        const getPosts = async ()=>{
+            const wait = await fetch('https://jsonplaceholder.typicode.com/posts');
+            return wait;
+        }
+        const getUsers = async ()=>{
+            const wait = await fetch(`https://jsonplaceholder.typicode.com/users`);
+            return wait;
+        }
+        
+        getUsers()
+        .then(res => res.json())
+        .then(data=>{
+            let users = "";
+            let iterator = 1;
+            data.forEach(entry =>{
+                users += `
+                    <li class='mt-5' style='cursor: pointer;' value='${iterator}'>Show posts for ${entry.name}</li>
+                `;
+                iterator++;
+            });
+
+            document.getElementById('users').innerHTML = users;
+            let collection = document.getElementById('users').children;
+
+            for(let i = 0; i < collection.length; i++)
+            {
+                collection[i].addEventListener('click', ()=>{
+                    getPosts()
+                    .then(res=> res.json())
+                    .then(data => {
+                        let output = "<h2 class='mt-4 title'>Posts</h2>";
+                        data.forEach(entry=>{
+                            if(entry.userId == collection[i].value)
+                            {
+                                output += `
+                                    <div class='mt-4'>
+                                        <h3 class='is-size-4 is-text-weight-semibold'>${entry.title}</h3>
+                                        <p>${entry.body}</p>
+                                    </div>
+                                `;
+                            }
+                        });
+                        document.getElementById('output').innerHTML = output;
+                    });
+                });
+            }
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <h1 class="title px-4 py-4">Get JSON Data</h1>
+    <section class="panel has-shadow mt-4 pl-4">
+        <div class="container">
+            <p class="title">Users</p>
+            <ul id="users" style="list-style: none;"></ul>
+        </div>
+    </section>
+    <section class="panel mt-4 pl-4 pt-4">
+        <div id="output"></div>
+    </section>
+</body>
+</html>
